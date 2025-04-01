@@ -1,0 +1,56 @@
+version: "3.8"
+
+services:
+  api:
+    build: ./app  # Ubicación del Dockerfile para FastAPI
+    ports:
+      - "8000:8000"  # Expone el puerto 8000
+    depends_on:
+      - postgres
+    networks:
+      - backend
+    environment:
+      - DATABASE_URL=postgresql://user:password@postgres:5432/mydb  # Conexión a PostgreSQL
+
+  postgres:
+    image: postgres:13
+    container_name: postgres_container
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=mydb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # Persistencia de datos
+    networks:
+      - backend
+    ports:
+      - "5432:5432"  # Exponer el puerto de PostgreSQL
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus_container
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml  # Configuración de Prometheus
+    ports:
+      - "9090:9090"  # Exponer el puerto de Prometheus
+    networks:
+      - backend
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana_container
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin  # Contraseña del admin de Grafana
+    ports:
+      - "3000:3000"  # Exponer el puerto de Grafana
+    networks:
+      - backend
+    volumes:
+      - grafana_data:/var/lib/grafana  # Persistencia de datos
+
+networks:
+  backend:  # Red para los contenedores
+
+volumes:
+  postgres_data: {}  # Volumen persistente para los datos de PostgreSQL
+  grafana_data: {}   # Volumen persistente para los datos de Grafana
