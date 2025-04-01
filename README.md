@@ -4,7 +4,7 @@
 
 ## Descripción
 
-Este proyecto implementa una **API RESTful** para la gestión de usuarios utilizando **FastAPI**. La API permite realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) sobre los usuarios, donde cada usuario tiene atributos como `id`, `nombre`, `edad`, y `email`.
+Este proyecto implementa una **API RESTful** para la gestión de usuarios utilizando **FastAPI**. La API permite realizar operaciones CRUD (Crear, obtener) sobre los usuarios, donde cada usuario tiene atributos como `id`, `nombre`, `edad`.
 
 Adicionalmente, se integra con **Prometheus** para monitorear las métricas relacionadas con la creación de usuarios y otros aspectos clave del rendimiento del sistema, como la latencia de las solicitudes. **Grafana** se utiliza para visualizar las métricas recolectadas en tiempo real, permitiendo un monitoreo y análisis eficientes de la aplicación.
 
@@ -43,3 +43,42 @@ El propósito principal del proyecto es:
    pip install -r requirements.txt
 
 
+**Aviso importante**
+
+Este proyecto utiliza **Docker Compose** para orquestar todos los servicios, incluyendo **FastAPI**, **PostgreSQL**, **Prometheus**, y **Grafana**.
+
+1. **Docker**: Asegúrate de tener Docker instalado en tu máquina. Si no lo tienes, puedes instalarlo desde [aquí](https://docs.docker.com/get-docker/).
+2. **Docker Compose**: Asegúrate de tener Docker Compose instalado. Si no lo tienes, sigue las instrucciones de instalación en [Docker Compose](https://docs.docker.com/compose/install/).
+
+
+3. Construir y ejecutar los contenedores con Docker Compose: En la raíz del proyecto, donde se encuentra el archivo docker-compose.yml, ejecuta el siguiente comando para construir y levantar todos los contenedores:
+   ```bash
+    docker-compose up --build
+
+
+Este comando hará lo siguiente:
+
+Construirá las imágenes de Docker necesarias.
+
+Levantará los contenedores para FastAPI, PostgreSQL, Prometheus, y Grafana.
+
+4. Acceder a la aplicación: Una vez que los contenedores estén en ejecución, puedes acceder a las diferentes aplicaciones a través de los siguientes puertos:
+
+
+Prometheus: http://localhost:9090
+
+Grafana: http://localhost:3000 (credenciales predeterminadas: admin / admin)
+
+
+5. Verificar que todo funcione correctamente:
+
+
+   ```bash
+       docker ps
+
+
+Verifica que el servicio de FastAPI esté corriendo correctamente accediendo a la ruta de la documentación en http://localhost:8000/docs.
+
+En Prometheus, verifica que las métricas de FastAPI estén siendo recolectadas correctamente en http://localhost:9090/targets.
+
+En Grafana, verifica que Prometheus esté configurado como fuente de datos y que las métricas de FastAPI se estén visualizando correctamente en el dashboard.
